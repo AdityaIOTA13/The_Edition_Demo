@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Edition — 360 Interior Viewer</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- 360 Viewer -->
+  <div id="panorama"></div>
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Fade overlay for transitions -->
+  <div id="fade-overlay"></div>
+
+  <!-- ── Minimap ─────────────────────────────────────────── -->
+  <div id="minimap-container">
+    <div id="minimap-header">
+      <span>Floor Plan</span>
+      <button id="minimap-toggle" aria-label="Toggle minimap">−</button>
+    </div>
+    <div id="minimap-body">
+      <div id="minimap-inner">
+        <!-- Floor plan image -->
+        <img id="floorplan-img" src="Baseplan.jpg" alt="Floor Plan" draggable="false" />
+        <!-- Viewpoint buttons — positioned via CSS custom properties -->
+        <button class="vp-dot" id="dot-A" data-vp="A"
+                style="--x:82.47%;--y:51.93%">A</button>
+        <button class="vp-dot" id="dot-B" data-vp="B"
+                style="--x:70.49%;--y:44.25%">B</button>
+        <button class="vp-dot" id="dot-C" data-vp="C"
+                style="--x:42.26%;--y:45.03%">C</button>
+        <button class="vp-dot" id="dot-D" data-vp="D"
+                style="--x:39.72%;--y:62.08%">D</button>
+        <button class="vp-dot" id="dot-E" data-vp="E"
+                style="--x:41.27%;--y:21.83%">E</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Bottom Controls ────────────────────────────────── -->
+  <div id="controls">
+    <!-- Viewpoint row -->
+    <div id="vp-row">
+      <button class="arrow-btn" id="prev-vp" aria-label="Previous viewpoint">&#8592;</button>
+      <div id="vp-btns">
+        <button class="vp-btn" data-vp="A">A</button>
+        <button class="vp-btn" data-vp="B">B</button>
+        <button class="vp-btn" data-vp="C">C</button>
+        <button class="vp-btn" data-vp="D">D</button>
+        <button class="vp-btn" data-vp="E">E</button>
+      </div>
+      <button class="arrow-btn" id="next-vp" aria-label="Next viewpoint">&#8594;</button>
+    </div>
+    <!-- Style row -->
+    <div id="style-row">
+      <button class="style-btn" data-style="Bareshell">Bareshell</button>
+      <button class="style-btn" data-style="01">Option 01</button>
+      <button class="style-btn" data-style="02">Option 02</button>
+      <button class="style-btn" data-style="03">Option 03</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

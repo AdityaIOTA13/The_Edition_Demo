@@ -1,0 +1,251 @@
+/* ── Reset & base ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0a0a0a;
+}
+
+/* ── Pannellum viewer ─────────────────────────────────── */
+#panorama {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Hide default pannellum branding / hotspot tooltip border */
+.pnlm-container { background: #0a0a0a !important; }
+.pnlm-about-msg { display: none !important; }
+
+/* ── Loading overlay ──────────────────────────────────── */
+#loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+#loading-overlay.visible { opacity: 1; pointer-events: all; }
+
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(255,255,255,0.15);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Fade overlay ─────────────────────────────────────── */
+#fade-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+#fade-overlay.fade-in  { opacity: 1; }
+#fade-overlay.fade-out { opacity: 0; }
+
+/* ── Minimap ──────────────────────────────────────────── */
+#minimap-container {
+  position: fixed;
+  top: 16px; right: 16px;
+  z-index: 100;
+  width: clamp(200px, 28vw, 340px);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(10,10,10,0.75);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+#minimap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+
+#minimap-toggle {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  transition: color 0.15s;
+}
+#minimap-toggle:hover { color: #fff; }
+
+#minimap-body {
+  overflow: hidden;
+  max-height: 600px;
+  transition: max-height 0.3s ease;
+}
+#minimap-body.collapsed { max-height: 0; }
+
+/* The inner wrapper keeps the floor plan + SVG + dots in sync */
+#minimap-inner {
+  position: relative;
+  width: 100%;
+}
+
+#floorplan-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+
+/* Viewpoint dot buttons */
+.vp-dot {
+  position: absolute;
+  left: var(--x);
+  top:  var(--y);
+  transform: translate(-50%, -50%);
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: #1F6FEB;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  z-index: 10;
+  line-height: 1;
+  padding: 0;
+}
+.vp-dot:hover {
+  transform: translate(-50%, -50%) scale(1.18);
+}
+.vp-dot.active:hover {
+  transform: translate(-50%, -50%) scale(1.3);
+}
+.vp-dot.active {
+  background: #fff;
+  color: #1F6FEB;
+  border-color: #1F6FEB;
+  transform: translate(-50%, -50%) scale(1.25);
+  box-shadow: 0 0 0 0 rgba(31,111,235,0.7);
+  animation: pulse 1.8s ease-out infinite;
+}
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(31,111,235,0.7); }
+  70%  { box-shadow: 0 0 0 8px rgba(31,111,235,0); }
+  100% { box-shadow: 0 0 0 0   rgba(31,111,235,0); }
+}
+
+/* ── Bottom controls ──────────────────────────────────── */
+#controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none; /* children opt-in */
+}
+
+#vp-row, #style-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 40px;
+  padding: 6px 10px;
+  pointer-events: all;
+}
+
+/* Viewpoint buttons */
+.vp-btn, .arrow-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.65);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 30px;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.03em;
+}
+.vp-btn:hover, .arrow-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
+.vp-btn.active {
+  background: #1F6FEB;
+  color: #fff;
+}
+
+.arrow-btn {
+  font-size: 15px;
+  padding: 5px 8px;
+}
+
+/* Style buttons */
+.style-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 5px 12px;
+  border-radius: 30px;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.style-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
+.style-btn.active {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  #minimap-container {
+    width: clamp(160px, 42vw, 240px);
+    top: 10px; right: 10px;
+  }
+  .vp-dot { width: 22px; height: 22px; font-size: 9px; }
+
+  #controls { bottom: 12px; gap: 6px; }
+  #vp-row, #style-row { padding: 5px 8px; gap: 4px; }
+  .vp-btn, .arrow-btn { font-size: 12px; padding: 4px 7px; }
+  .style-btn { font-size: 11px; padding: 4px 8px; }
+}
+
+@media (max-width: 480px) {
+  #minimap-container { width: clamp(140px, 48vw, 200px); }
+  .style-btn { padding: 4px 6px; font-size: 10px; }
+}
