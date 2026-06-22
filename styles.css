@@ -8,6 +8,26 @@ html, body {
   background: #0a0a0a;
 }
 
+/* ── Logo ─────────────────────────────────────────────── */
+#logo-wrap {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+#brand-logo {
+  height: 40px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5));
+}
+
+@media (max-width: 768px) {
+  #brand-logo { height: 30px; }
+}
+
 /* ── Pannellum viewer ─────────────────────────────────── */
 #panorama {
   position: fixed;
